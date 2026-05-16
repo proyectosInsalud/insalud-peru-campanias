@@ -14,7 +14,7 @@ export const surData = {
       vph: {
         gestor: "Sheyla",
         email: "gestor.citas11@insalud.pe",
-        whatsapp: "961724899",
+        whatsapp: "51933039218",
         message: "¡Hola! Vi su landing de tratamiento para eliminación de verrugas por VPH en su sede Sur. ¿Podrían darme más información sobre el procedimiento y agendar una cita?"
       }
     },
