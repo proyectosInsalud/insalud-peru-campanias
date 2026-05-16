@@ -2,20 +2,30 @@
 
 import { useState } from "react";
 import { MessageCircle, X } from "lucide-react";
+import { WhatsappModal } from "@/components/ui/WhatsappModal";
 
 type FloatingWhatsAppProps = {
   phoneNumber: string; // Número sin el +, ej: "51987654321"
   message: string; // Mensaje predefinido
   tooltipText?: string; // Solo esta personalización es útil
+  onWhatsAppClick?: () => void;
+  useModal?: boolean;
+  sede?: string;
+  tratamiento?: string;
 };
 
 export const FloatingWhatsApp = ({
   phoneNumber,
   message,
   tooltipText = "¡Conversemos por WhatsApp!",
+  onWhatsAppClick,
+  useModal = false,
+  sede,
+  tratamiento
 }: FloatingWhatsAppProps) => {
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Valores fijos para simplicidad y consistencia
   const backgroundColor = "#25D366";
@@ -24,7 +34,12 @@ export const FloatingWhatsApp = ({
   // Construir URL de WhatsApp
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
 
-  const handleClick = () => {
+  const handleClick = (e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    
     // Notificacion a google tag manager
     if(typeof window !== "undefined") {
       window.dataLayer = window.dataLayer || [];
@@ -34,7 +49,18 @@ export const FloatingWhatsApp = ({
             message: message,
         });
     }
-    window.open(whatsappUrl, "_blank");
+    
+    // Tracking personalizado
+    if (onWhatsAppClick) {
+        onWhatsAppClick();
+    }
+    
+    if (useModal) {
+      setIsExpanded(false);
+      setIsModalOpen(true);
+    } else {
+      window.open(whatsappUrl, "_blank");
+    }
   };
 
   const toggleExpanded = () => {
@@ -133,6 +159,17 @@ export const FloatingWhatsApp = ({
           onClick={() => setIsExpanded(false)}
         />
       )}
+
+      {/* Modal de captura */}
+      <WhatsappModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        whatsappNumber={phoneNumber}
+        whatsappMessage={message}
+        sede={sede}
+        tratamiento={tratamiento}
+        origen="whatsapp_flotante"
+      />
     </>
   );
 }; 

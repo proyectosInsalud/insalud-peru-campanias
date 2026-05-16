@@ -25,6 +25,10 @@ type HeroContactProps = {
     };
     tratamiento?: string;
     sede?: string;
+    redirectToWhatsapp?: {
+        number: string;
+        message: string;
+    };
 }
 
 export const HeroContact = ({ 
@@ -35,7 +39,8 @@ export const HeroContact = ({
     description, 
     gestorData, 
     tratamiento, 
-    sede 
+    sede,
+    redirectToWhatsapp
 }: HeroContactProps) => {
 
     const { justClaimedPrize } = useTitleContext();
@@ -107,6 +112,7 @@ export const HeroContact = ({
                         gestorData={gestorData}
                         tratamiento={tratamiento}
                         sede={sede}
+                        redirectToWhatsapp={redirectToWhatsapp}
                     />
                 </div>
                 <div ref={imageRef} className="md:col-span-5 hidden md:block">

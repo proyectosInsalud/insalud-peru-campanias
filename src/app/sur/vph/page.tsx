@@ -1,3 +1,4 @@
+"use client";
 import { TestimonialBubbles } from "../../components/TestimonialBubbles";
 import { Treatment } from "../../components/Treatment/Treatment";
 import { AboutDevice } from "../../components/AboutDevice";
@@ -8,24 +9,30 @@ import { FloatingWhatsApp } from "@/components/ui/FloatingWhatsApp";
 import { questionVph } from "@/data/questions/questionVph";
 import { surData } from "@/data/sedes/sur";
 import { Footer } from "@/app/components/Footer";
-//import { PageWrapper } from '@/components/ui/PageWrapper'
 import { TitleProvider } from '@/contexts/TitleContext'
 import { messagesVph } from "@/data/messages/messagesVph";
 import { surVphBenefits } from "@/data/surVphBenefits";
 
 export default function VphSur() {
+  
+  // Función para registrar clic en Google Sheets
+  const trackToSheets = async (tipo: string) => {
+    try {
+        await fetch('/api/sheets', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                tipo: tipo,
+                sede: "Sur",
+                tratamiento: "VPH"
+            }),
+        });
+    } catch (error) {
+        console.error(`Error tracking ${tipo}:`, error);
+    }
+  };
+
   return (
-    //<PageWrapper 
-      //sede="Sur" 
-      //tratamiento="VPH"
-      //spinWheelProps={{
-        //autoShowDelay: 1,
-        //spinDuration: 5,
-        //firstSpinAngle: 315,
-        //secondSpinAngle: 225,
-        //showCloseButton: false
-      //}}
-    //>
     <TitleProvider sede="Sur" tratamiento="VPH">
       {/* Hero Section */}
       <HeroContact
@@ -37,6 +44,10 @@ export default function VphSur() {
         gestorData={surData.landings.vph}
         tratamiento="VPH"
         sede="Sur"
+        redirectToWhatsapp={{
+            number: surData.landings.vph.whatsapp,
+            message: surData.landings.vph.message
+        }}
       />
       {/* Testimonios Section */}
       <TestimonialBubbles
@@ -64,6 +75,10 @@ export default function VphSur() {
         titleMobile="Elimina las verrugas de forma segura y efectiva"
         whatsappNumber={surData.landings.vph.whatsapp}
         whatsappMessage={surData.landings.vph.message}
+        onCtaClick={() => trackToSheets('whatsapp_cta')}
+        useModal={true}
+        sede="Sur"
+        tratamiento="VPH"
       />
       {/* Preguntas Section */}
       <Questions questions={questionVph} />
@@ -72,6 +87,10 @@ export default function VphSur() {
         phoneNumber={surData.landings.vph.whatsapp}
         message={surData.landings.vph.message}
         tooltipText="¡Conversemos por WhatsApp!"
+        onWhatsAppClick={() => trackToSheets('whatsapp_flotante')}
+        useModal={true}
+        sede="Sur"
+        tratamiento="VPH"
       />
       {/* Footer */}
       <Footer

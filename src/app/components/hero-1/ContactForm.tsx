@@ -37,9 +37,13 @@ type ContactFormProps = {
   };
   tratamiento?: string;
   sede?: string;
+  redirectToWhatsapp?: {
+    number: string;
+    message: string;
+  };
 };
 
-export const ContactForm = ({ gestorData, tratamiento, sede }: ContactFormProps) => {
+export const ContactForm = ({ gestorData, tratamiento, sede, redirectToWhatsapp }: ContactFormProps) => {
   const [isLoading, setIsLoading] = useState(false);
   
   const form = useForm<FormLeads>({
@@ -85,7 +89,27 @@ export const ContactForm = ({ gestorData, tratamiento, sede }: ContactFormProps)
         toast.success(`Tus datos fueron enviados correctamente. Nos contactaremos contigo pronto 😊`);
         form.reset();
 
-        // Save lead to external service
+        // Register in Google Sheets directly
+        try {
+            await fetch('/api/sheets', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    tipo: "formulario",
+                    nombres: values.nombres,
+                    telefono: values.telefono,
+                    turno: values.turno,
+                    sede: sede,
+                    tratamiento: tratamiento
+                }),
+            });
+        } catch (sheetsError) {
+            console.error('Error saving to Google Sheets:', sheetsError);
+        }
+
+        // Save lead to external service (Callhub)
         try {
           await saveLead({
             id_lead_source: 1, // Assuming a default value
@@ -102,6 +126,13 @@ export const ContactForm = ({ gestorData, tratamiento, sede }: ContactFormProps)
           console.error('Error saving lead to external service:', saveError);
           // Don't show error to user as the main submission succeeded
         }
+
+        // Redirect to WhatsApp if specified
+        if (redirectToWhatsapp && typeof window !== "undefined") {
+            const whatsappUrl = `https://wa.me/${redirectToWhatsapp.number}?text=${encodeURIComponent(redirectToWhatsapp.message)}`;
+            window.open(whatsappUrl, "_blank");
+        }
+        
       } else {
         toast.error(data.mensaje || "Error al enviar el formulario");
       }
