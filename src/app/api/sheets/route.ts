@@ -12,11 +12,27 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const serviceAccountEmail = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
+    const rawPrivateKey = process.env.GOOGLE_PRIVATE_KEY;
+    const spreadsheetId = process.env.GOOGLE_SHEET_ID;
+
+    if (!serviceAccountEmail || !rawPrivateKey || !spreadsheetId) {
+      const missing = [
+        !serviceAccountEmail && 'GOOGLE_SERVICE_ACCOUNT_EMAIL',
+        !rawPrivateKey && 'GOOGLE_PRIVATE_KEY',
+        !spreadsheetId && 'GOOGLE_SHEET_ID',
+      ].filter(Boolean).join(', ');
+      return NextResponse.json({ mensaje: "Faltan variables de entorno", detalle: missing }, { status: 500 });
+    }
+
+    // Normalizar saltos de línea del private key (puede venir con \\n o \n según el proveedor)
+    const privateKey = rawPrivateKey.replace(/\\n/g, '\n');
+
     // Configurar auth de Google
     const auth = new google.auth.GoogleAuth({
       credentials: {
-        client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-        private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n'), // Importante reemplazar \n
+        client_email: serviceAccountEmail,
+        private_key: privateKey,
       },
       scopes: [
         "https://www.googleapis.com/auth/drive",
@@ -45,7 +61,7 @@ export async function POST(req: NextRequest) {
 
     // Insertar fila
     await sheets.spreadsheets.values.append({
-      spreadsheetId: process.env.GOOGLE_SHEET_ID,
+      spreadsheetId,
       range: "Hoja 1!A:G", // Ajustar "Hoja 1" al nombre de la pestaña si es necesario
       valueInputOption: "USER_ENTERED",
       requestBody: {
