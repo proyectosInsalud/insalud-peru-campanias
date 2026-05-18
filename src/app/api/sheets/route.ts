@@ -55,9 +55,10 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
-    console.error("Error saving to Google Sheets:", error);
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error("Error saving to Google Sheets:", errorMessage);
     return NextResponse.json(
-      { mensaje: "Error saving to Google Sheets" },
+      { mensaje: "Error saving to Google Sheets", detalle: errorMessage },
       { status: 500 }
     );
   }
