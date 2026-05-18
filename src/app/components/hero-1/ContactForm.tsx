@@ -45,7 +45,7 @@ type ContactFormProps = {
 
 export const ContactForm = ({ gestorData, tratamiento, sede, redirectToWhatsapp }: ContactFormProps) => {
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const form = useForm<FormLeads>({
     resolver: zodResolver(formLeadsSchema),
     defaultValues: {
@@ -62,6 +62,20 @@ export const ContactForm = ({ gestorData, tratamiento, sede, redirectToWhatsapp 
   async function onSubmit(values: FormLeads) {
     setIsLoading(true);
     try {
+      // Guardar en Sheets siempre, antes del mail
+      fetch('/api/sheets', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          tipo: "formulario",
+          nombres: values.nombres,
+          telefono: values.telefono,
+          turno: values.turno,
+          sede: sede,
+          tratamiento: tratamiento
+        }),
+      }).catch((e) => console.error('Sheets error:', e));
+
       const response = await fetch('/api/mail', {
         method: 'POST',
         headers: {
@@ -80,7 +94,7 @@ export const ContactForm = ({ gestorData, tratamiento, sede, redirectToWhatsapp 
 
       if (response.ok) {
         // Notificacion a google tag manager
-        if(typeof window !== "undefined") {
+        if (typeof window !== "undefined") {
           window.dataLayer = window.dataLayer || [];
           window.dataLayer.push({
             event: "form_submission",
@@ -88,26 +102,6 @@ export const ContactForm = ({ gestorData, tratamiento, sede, redirectToWhatsapp 
         }
         toast.success(`Tus datos fueron enviados correctamente. Nos contactaremos contigo pronto 😊`);
         form.reset();
-
-        // Register in Google Sheets directly
-        try {
-            await fetch('/api/sheets', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    tipo: "formulario",
-                    nombres: values.nombres,
-                    telefono: values.telefono,
-                    turno: values.turno,
-                    sede: sede,
-                    tratamiento: tratamiento
-                }),
-            });
-        } catch (sheetsError) {
-            console.error('Error saving to Google Sheets:', sheetsError);
-        }
 
         // Save lead to external service (Callhub)
         try {
@@ -129,10 +123,10 @@ export const ContactForm = ({ gestorData, tratamiento, sede, redirectToWhatsapp 
 
         // Redirect to WhatsApp if specified
         if (redirectToWhatsapp && typeof window !== "undefined") {
-            const whatsappUrl = `https://wa.me/${redirectToWhatsapp.number}?text=${encodeURIComponent(redirectToWhatsapp.message)}`;
-            window.open(whatsappUrl, "_blank");
+          const whatsappUrl = `https://wa.me/${redirectToWhatsapp.number}?text=${encodeURIComponent(redirectToWhatsapp.message)}`;
+          window.open(whatsappUrl, "_blank");
         }
-        
+
       } else {
         toast.error(data.mensaje || "Error al enviar el formulario");
       }
@@ -164,7 +158,7 @@ export const ContactForm = ({ gestorData, tratamiento, sede, redirectToWhatsapp 
                       placeholder="Nombres y apellidos"
                     />
                   </FormControl>
-                  <FormMessage className="font-in-nunito"/>
+                  <FormMessage className="font-in-nunito" />
                 </FormItem>
               )}
             />
@@ -179,13 +173,13 @@ export const ContactForm = ({ gestorData, tratamiento, sede, redirectToWhatsapp 
                       {...field}
                       placeholder="Celular*"
                       maxLength={9}
-                        onChange={(e) => {
-                          const value = e.target.value.replace(/\D/g, '');
-                          field.onChange(value);
-                        }}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/\D/g, '');
+                        field.onChange(value);
+                      }}
                     />
                   </FormControl>
-                  <FormMessage className="font-in-nunito "/>
+                  <FormMessage className="font-in-nunito " />
                 </FormItem>
               )}
             />
@@ -203,11 +197,10 @@ export const ContactForm = ({ gestorData, tratamiento, sede, redirectToWhatsapp 
                         defaultValue={field.value}
                       >
                         <SelectTrigger
-                          className={`bg-white font-medium py-5 ${
-                            fieldState.error
+                          className={`bg-white font-medium py-5 ${fieldState.error
                               ? "border-red-500 border"
                               : "border-gray-300"
-                          } [&>span]:text-in-blue [&>span]:font-medium`}
+                            } [&>span]:text-in-blue [&>span]:font-medium`}
                         >
                           <SelectValue placeholder="Elige el turno*" />
                         </SelectTrigger>
@@ -227,7 +220,7 @@ export const ContactForm = ({ gestorData, tratamiento, sede, redirectToWhatsapp 
                         </SelectContent>
                       </Select>
                     </FormControl>
-                    <FormMessage className="font-in-nunito"/>
+                    <FormMessage className="font-in-nunito" />
                   </FormItem>
                 )}
               />
@@ -252,7 +245,7 @@ export const ContactForm = ({ gestorData, tratamiento, sede, redirectToWhatsapp 
                         <Label className="text-in-blue font-normal" htmlFor="tarde">Tarde (3pm a 7pm)</Label>
                       </div>
                     </RadioGroup>
-                    <FormMessage className="font-in-nunito"/>
+                    <FormMessage className="font-in-nunito" />
                   </FormItem>
                 )}
               />
@@ -275,11 +268,11 @@ export const ContactForm = ({ gestorData, tratamiento, sede, redirectToWhatsapp 
               </span>
             </Button>
           </section>
-            <p className="font-medium font-in-nunito md:font-normal text-in-blue text-xs md:pl-1">Al llenar el formulario, Ud. acepta los 
-              <Link className="text-in-orange" href={cdn("/campanas/vph-jesus-maria/assets/pdf/terminos-y-condiciones.pdf")} target="_blank"> {' '}
-                Términos y Condiciones / Política de Privacidad
-              </Link>
-            </p>
+          <p className="font-medium font-in-nunito md:font-normal text-in-blue text-xs md:pl-1">Al llenar el formulario, Ud. acepta los
+            <Link className="text-in-orange" href={cdn("/campanas/vph-jesus-maria/assets/pdf/terminos-y-condiciones.pdf")} target="_blank"> {' '}
+              Términos y Condiciones / Política de Privacidad
+            </Link>
+          </p>
         </div>
       </form>
     </Form>
