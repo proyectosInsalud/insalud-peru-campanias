@@ -32,6 +32,10 @@ export default function OndasGolfPage() {
         gestorData={golfData.landings.ondasChoque}
         tratamiento="Ondas de Choque"
         sede="Golf"
+        redirectToWhatsapp={{
+          number: golfData.landings.ondasChoque.whatsapp,
+          message: golfData.landings.ondasChoque.message,
+        }}
       />
 
       {/* Testimonios Section */}
@@ -70,6 +74,9 @@ export default function OndasGolfPage() {
                 titleMobile="Recupera tu confianza con un tratamiento clínico eficaz y personalizado"
                 whatsappNumber={golfData.landings.ondasChoque.whatsapp}
                 whatsappMessage={golfData.landings.ondasChoque.message}
+                useModal={true}
+                sede="Golf"
+                tratamiento="Ondas de Choque"
             />
 
       {/* Preguntas Section */}
@@ -82,6 +89,9 @@ export default function OndasGolfPage() {
         phoneNumber={golfData.landings.ondasChoque.whatsapp}
         message={golfData.landings.ondasChoque.message}
         tooltipText="¿Dudas sobre disfunción eréctil?"
+        useModal={true}
+        sede="Golf"
+        tratamiento="Ondas de Choque"
       />
 
       <Footer

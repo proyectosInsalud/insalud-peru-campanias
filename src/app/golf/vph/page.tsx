@@ -37,6 +37,10 @@ export default function VphGolf() {
         gestorData={golfData.landings.vph}
         tratamiento="VPH"
         sede="Golf"
+        redirectToWhatsapp={{
+          number: golfData.landings.vph.whatsapp,
+          message: golfData.landings.vph.message,
+        }}
       />
       {/* Testimonios Section */}
       <TestimonialBubbles
@@ -69,6 +73,9 @@ export default function VphGolf() {
         titleMobile="Recupera tu confianza con un tratamiento clínico eficaz y personalizado"
         whatsappNumber={golfData.landings.vph.whatsapp}
         whatsappMessage={golfData.landings.vph.message}
+        useModal={true}
+        sede="Golf"
+        tratamiento="VPH"
       />
       {/* Preguntas Section */}
       <Questions questions={questionVph} />
@@ -77,6 +84,9 @@ export default function VphGolf() {
         phoneNumber={golfData.landings.vph.whatsapp}
         message={golfData.landings.vph.message}
         tooltipText="¡Conversemos por WhatsApp!"
+        useModal={true}
+        sede="Golf"
+        tratamiento="VPH"
       />
       {/* Footer */}
       <Footer

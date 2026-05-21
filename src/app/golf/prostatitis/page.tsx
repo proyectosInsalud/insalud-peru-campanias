@@ -37,6 +37,10 @@ export default function ProstatitisGolf() {
         gestorData={golfData.landings.prostatitis}
         tratamiento="Prostatitis"
         sede="Golf"
+        redirectToWhatsapp={{
+          number: golfData.landings.prostatitis.whatsapp,
+          message: golfData.landings.prostatitis.message,
+        }}
       />
       {/* Testimonios Section */}
       <TestimonialBubbles
@@ -64,6 +68,9 @@ export default function ProstatitisGolf() {
         titleMobile="Recupera tu calidad de vida con nuestro tratamiento avanzado con Ondas de Choque "
         whatsappNumber={golfData.landings.prostatitis.whatsapp}
         whatsappMessage={golfData.landings.prostatitis.message}
+        useModal={true}
+        sede="Golf"
+        tratamiento="Prostatitis"
       />
       {/* Preguntas Section */}
       <Questions questions={questionProstatitis} />
@@ -72,6 +79,9 @@ export default function ProstatitisGolf() {
         phoneNumber={golfData.landings.prostatitis.whatsapp}
         message={golfData.landings.prostatitis.message}
         tooltipText="¡Conversemos por WhatsApp!"
+        useModal={true}
+        sede="Golf"
+        tratamiento="Prostatitis"
       />
       {/* Footer */}
       <Footer

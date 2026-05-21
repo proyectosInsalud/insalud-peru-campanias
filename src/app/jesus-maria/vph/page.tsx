@@ -38,6 +38,10 @@ export default function VphJesusMaria() {
         gestorData={jesusMariaData.landings.vph}
         tratamiento="VPH"
         sede="Jesús María"
+        redirectToWhatsapp={{
+          number: jesusMariaData.landings.vph.whatsapp,
+          message: jesusMariaData.landings.vph.message,
+        }}
       />
       {/* Testimonios Section */}
       <TestimonialBubbles
@@ -70,6 +74,9 @@ export default function VphJesusMaria() {
         titleMobile="Recupera tu confianza con un tratamiento clínico eficaz y personalizado"
         whatsappNumber={jesusMariaData.landings.vph.whatsapp}
         whatsappMessage={jesusMariaData.landings.vph.message}
+        useModal={true}
+        sede="Jesús María"
+        tratamiento="VPH"
       />
       {/* Preguntas Section */}
       <Questions questions={questionVph} />
@@ -78,6 +85,9 @@ export default function VphJesusMaria() {
         phoneNumber={jesusMariaData.landings.vph.whatsapp}
         message={jesusMariaData.landings.vph.message}
         tooltipText="¡Conversemos por WhatsApp!"
+        useModal={true}
+        sede="Jesús María"
+        tratamiento="VPH"
       />
       {/* Footer */}
       <Footer

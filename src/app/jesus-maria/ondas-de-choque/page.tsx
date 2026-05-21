@@ -28,7 +28,15 @@ export default function DisfuncionJesusMaria() {
         //>
         <TitleProvider sede="Jesús María" tratamiento="Ondas de Choque">
             {/* Hero Section */}
-            <HeroContact />
+            <HeroContact
+                gestorData={jesusMariaData.landings.ondasChoque}
+                tratamiento="Ondas de Choque"
+                sede="Jesús María"
+                redirectToWhatsapp={{
+                    number: jesusMariaData.landings.ondasChoque.whatsapp,
+                    message: jesusMariaData.landings.ondasChoque.message,
+                }}
+            />
             
             {/* Testimonios Section */}
             <section id="testimonios">
@@ -64,6 +72,9 @@ export default function DisfuncionJesusMaria() {
                 titleMobile="Recupera tu confianza con un tratamiento clínico eficaz y personalizado"
                 whatsappNumber={jesusMariaData.landings.ondasChoque.whatsapp}
                 whatsappMessage={jesusMariaData.landings.ondasChoque.message}
+                useModal={true}
+                sede="Jesús María"
+                tratamiento="Ondas de Choque"
             />
             
             {/* Preguntas Section */}
@@ -76,6 +87,9 @@ export default function DisfuncionJesusMaria() {
                 phoneNumber={jesusMariaData.landings.ondasChoque.whatsapp}
                 message={jesusMariaData.landings.ondasChoque.message}
                 tooltipText="¿Dudas sobre disfunción eréctil?"
+                useModal={true}
+                sede="Jesús María"
+                tratamiento="Ondas de Choque"
             />
                           <Footer
           address={jesusMariaData.address}

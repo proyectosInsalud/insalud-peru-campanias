@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Remove-Item -Recurse -Force \"C:\\\\Users\\\\user\\\\Desktop\\\\Fabricio\\\\insalud-peru-campanias\\\\.next\" -ErrorAction SilentlyContinue)",
+      "Bash(Write-Output \"Done\")"
+    ]
+  }
+}

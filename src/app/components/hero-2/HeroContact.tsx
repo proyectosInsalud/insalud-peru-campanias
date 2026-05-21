@@ -14,9 +14,13 @@ type HeroContactProps = {
   };
   tratamiento?: string;
   sede?: string;
+  redirectToWhatsapp?: {
+    number: string;
+    message: string;
+  };
 };
 
-export const HeroContact = ({ gestorData, tratamiento, sede }: HeroContactProps) => {
+export const HeroContact = ({ gestorData, tratamiento, sede, redirectToWhatsapp }: HeroContactProps) => {
   const { justClaimedPrize } = useTitleContext();
   
   // Títulos dinámicos basados en si se reclamó el premio
@@ -61,6 +65,7 @@ export const HeroContact = ({ gestorData, tratamiento, sede }: HeroContactProps)
           gestorData={gestorData}
           tratamiento={tratamiento}
           sede={sede}
+          redirectToWhatsapp={redirectToWhatsapp}
         />
     </div>
   )

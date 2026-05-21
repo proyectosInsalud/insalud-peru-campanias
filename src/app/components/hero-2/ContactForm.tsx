@@ -35,9 +35,13 @@ type ContactFormProps = {
   };
   tratamiento?: string;
   sede?: string;
+  redirectToWhatsapp?: {
+    number: string;
+    message: string;
+  };
 };
 
-export const ContactForm = ({ gestorData, tratamiento, sede }: ContactFormProps) => {
+export const ContactForm = ({ gestorData, tratamiento, sede, redirectToWhatsapp }: ContactFormProps) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<FormLeads>({
@@ -56,6 +60,19 @@ export const ContactForm = ({ gestorData, tratamiento, sede }: ContactFormProps)
   async function onSubmit(values: FormLeads) {
     setIsLoading(true);
     try {
+      fetch("/api/sheets", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          tipo: "formulario",
+          nombres: values.nombres,
+          telefono: values.telefono,
+          turno: values.turno,
+          sede: sede,
+          tratamiento: tratamiento,
+        }),
+      }).catch((e) => console.error("Sheets error:", e));
+
       const response = await fetch("/api/mail", {
         method: "POST",
         headers: {
@@ -80,7 +97,7 @@ export const ContactForm = ({ gestorData, tratamiento, sede }: ContactFormProps)
             event: "form_submission",
           });
         }
-        toast.success(`Correo enviado a ${gestorData?.gestor || 'nuestro equipo'} - Nos contactaremos contigo pronto`);
+        toast.success("Tus datos fueron enviados correctamente. Nos contactaremos contigo pronto 😊");
         form.reset();
 
         // Save lead to external service
@@ -88,17 +105,21 @@ export const ContactForm = ({ gestorData, tratamiento, sede }: ContactFormProps)
           await saveLead({
             id_lead_source: 15,
             name: values.nombres,
-            email: 'Sin email',
+            email: gestorData?.email || "",
             phone: `51${values.telefono}`,
-            reason: tratamiento || '',
-            sede: sede || '',
+            reason: tratamiento || "",
+            sede: sede || "",
             date: new Date().toISOString(),
-            url: typeof window !== 'undefined' ? window.location.pathname : '',
-            id_announcement: '',
+            url: `https://app.insalud.pe${typeof window !== "undefined" ? window.location.pathname : ""}`,
+            id_announcement: "",
           });
         } catch (saveError) {
-          console.error('Error saving lead to external service:', saveError);
-          // Don't show error to user as the main submission succeeded
+          console.error("Error saving lead to external service:", saveError);
+        }
+
+        if (redirectToWhatsapp && typeof window !== "undefined") {
+          const whatsappUrl = `https://wa.me/${redirectToWhatsapp.number}?text=${encodeURIComponent(redirectToWhatsapp.message)}`;
+          window.open(whatsappUrl, "_blank");
         }
       } else {
         toast.error(data.mensaje || "Error al enviar el formulario");

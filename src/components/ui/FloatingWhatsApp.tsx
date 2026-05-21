@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { MessageCircle, X } from "lucide-react";
 import { WhatsappModal } from "@/components/ui/WhatsappModal";
+import { trackToSheets } from "@/utils/trackToSheets";
 
 type FloatingWhatsAppProps = {
   phoneNumber: string; // Número sin el +, ej: "51987654321"
@@ -50,7 +51,6 @@ export const FloatingWhatsApp = ({
         });
     }
     
-    // Tracking personalizado
     if (onWhatsAppClick) {
         onWhatsAppClick();
     }
@@ -58,6 +58,9 @@ export const FloatingWhatsApp = ({
     if (useModal) {
       setIsExpanded(false);
       setIsModalOpen(true);
+      if (sede && tratamiento) {
+        trackToSheets("whatsapp_flotante", sede, tratamiento);
+      }
     } else {
       window.open(whatsappUrl, "_blank");
     }

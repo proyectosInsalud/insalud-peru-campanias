@@ -4,6 +4,7 @@ import Image from "next/image"
 import { FaWhatsapp } from "react-icons/fa";
 import { useState } from "react";
 import { WhatsappModal } from "@/components/ui/WhatsappModal";
+import { trackToSheets } from "@/utils/trackToSheets";
 
 type AppointmentCtaProps = {
     title: string;
@@ -38,6 +39,9 @@ export const AppointmentCta = ({
             e.preventDefault();
             e.stopPropagation();
             setIsModalOpen(true);
+            if (sede && tratamiento) {
+                trackToSheets("whatsapp_cta", sede, tratamiento);
+            }
         }
         
         if (onCtaClick) {

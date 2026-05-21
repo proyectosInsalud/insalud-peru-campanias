@@ -37,6 +37,10 @@ export default function ProstatitisJesusMaria() {
         gestorData={jesusMariaData.landings.prostatitis}
         tratamiento="Prostatitis"
         sede="Jesús María"
+        redirectToWhatsapp={{
+          number: jesusMariaData.landings.prostatitis.whatsapp,
+          message: jesusMariaData.landings.prostatitis.message,
+        }}
       />
       {/* Testimonios Section */}
       <TestimonialBubbles
@@ -64,6 +68,9 @@ export default function ProstatitisJesusMaria() {
         titleMobile="Recupera tu calidad de vida con nuestro tratamiento avanzado con Ondas de Choque "
         whatsappNumber={jesusMariaData.landings.prostatitis.whatsapp}
         whatsappMessage={jesusMariaData.landings.prostatitis.message}
+        useModal={true}
+        sede="Jesús María"
+        tratamiento="Prostatitis"
       />
       {/* Preguntas Section */}
       <Questions questions={questionProstatitis} />
@@ -72,6 +79,9 @@ export default function ProstatitisJesusMaria() {
         phoneNumber={jesusMariaData.landings.prostatitis.whatsapp}
         message={jesusMariaData.landings.prostatitis.message}
         tooltipText="¡Conversemos por WhatsApp!"
+        useModal={true}
+        sede="Jesús María"
+        tratamiento="Prostatitis"
       />
       {/* Footer */}
       <Footer

@@ -1,4 +1,3 @@
-"use client";
 import { TestimonialBubbles } from "../../components/TestimonialBubbles";
 import { Treatment } from "../../components/Treatment/Treatment";
 import { AboutDevice } from "../../components/AboutDevice";
@@ -14,24 +13,6 @@ import { messagesVph } from "@/data/messages/messagesVph";
 import { surVphBenefits } from "@/data/surVphBenefits";
 
 export default function VphSur() {
-  
-  // Función para registrar clic en Google Sheets
-  const trackToSheets = async (tipo: string) => {
-    try {
-        await fetch('/api/sheets', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                tipo: tipo,
-                sede: "Sur",
-                tratamiento: "VPH"
-            }),
-        });
-    } catch (error) {
-        console.error(`Error tracking ${tipo}:`, error);
-    }
-  };
-
   return (
     <TitleProvider sede="Sur" tratamiento="VPH">
       {/* Hero Section */}
@@ -75,7 +56,6 @@ export default function VphSur() {
         titleMobile="Elimina las verrugas de forma segura y efectiva"
         whatsappNumber={surData.landings.vph.whatsapp}
         whatsappMessage={surData.landings.vph.message}
-        onCtaClick={() => trackToSheets('whatsapp_cta')}
         useModal={true}
         sede="Sur"
         tratamiento="VPH"
@@ -87,7 +67,6 @@ export default function VphSur() {
         phoneNumber={surData.landings.vph.whatsapp}
         message={surData.landings.vph.message}
         tooltipText="¡Conversemos por WhatsApp!"
-        onWhatsAppClick={() => trackToSheets('whatsapp_flotante')}
         useModal={true}
         sede="Sur"
         tratamiento="VPH"
