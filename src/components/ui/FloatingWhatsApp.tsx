@@ -58,9 +58,6 @@ export const FloatingWhatsApp = ({
     if (useModal) {
       setIsExpanded(false);
       setIsModalOpen(true);
-      if (sede && tratamiento) {
-        trackToSheets("whatsapp_flotante", sede, tratamiento);
-      }
     } else {
       window.open(whatsappUrl, "_blank");
     }

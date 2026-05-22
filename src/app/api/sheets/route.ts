@@ -12,6 +12,22 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    if (tipo === "formulario") {
+      if (!nombres || String(nombres).trim().length === 0) {
+        return NextResponse.json(
+          { mensaje: "El nombre es requerido" },
+          { status: 400 }
+        );
+      }
+
+      if (!telefono || !/^9\d{8}$/.test(String(telefono))) {
+        return NextResponse.json(
+          { mensaje: "El teléfono debe tener 9 dígitos y comenzar con 9" },
+          { status: 400 }
+        );
+      }
+    }
+
     const serviceAccountEmail = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
     const rawPrivateKey = process.env.GOOGLE_PRIVATE_KEY;
     const spreadsheetId = process.env.GOOGLE_SHEET_ID;

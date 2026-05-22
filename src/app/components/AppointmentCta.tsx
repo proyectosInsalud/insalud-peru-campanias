@@ -39,9 +39,6 @@ export const AppointmentCta = ({
             e.preventDefault();
             e.stopPropagation();
             setIsModalOpen(true);
-            if (sede && tratamiento) {
-                trackToSheets("whatsapp_cta", sede, tratamiento);
-            }
         }
         
         if (onCtaClick) {

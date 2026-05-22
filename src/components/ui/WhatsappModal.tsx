@@ -32,13 +32,18 @@ export function WhatsappModal({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!nombres || !telefono) {
-      toast.error("Por favor completa todos los campos");
+    if (!nombres || String(nombres).trim().length === 0) {
+      toast.error("Por favor ingresa tu nombre");
       return;
     }
 
-    if (telefono.length < 9) {
-      toast.error("El número debe tener al menos 9 dígitos");
+    if (!telefono) {
+      toast.error("Por favor ingresa tu celular");
+      return;
+    }
+
+    if (!/^9\d{8}$/.test(telefono)) {
+      toast.error("El celular debe tener 9 dígitos y comenzar con 9");
       return;
     }
 
