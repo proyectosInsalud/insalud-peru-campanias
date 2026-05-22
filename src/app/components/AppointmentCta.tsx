@@ -4,7 +4,6 @@ import Image from "next/image"
 import { FaWhatsapp } from "react-icons/fa";
 import { useState } from "react";
 import { WhatsappModal } from "@/components/ui/WhatsappModal";
-import { trackToSheets } from "@/utils/trackToSheets";
 
 type AppointmentCtaProps = {
     title: string;

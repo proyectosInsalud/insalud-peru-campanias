@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { MessageCircle, X } from "lucide-react";
 import { WhatsappModal } from "@/components/ui/WhatsappModal";
-import { trackToSheets } from "@/utils/trackToSheets";
 
 type FloatingWhatsAppProps = {
   phoneNumber: string; // Número sin el +, ej: "51987654321"
